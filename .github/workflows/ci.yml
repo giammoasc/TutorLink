@@ -1,0 +1,38 @@
+# Compila il progetto e lancia i test a ogni push su main e a ogni pull request.
+# Serve a verificare che tutto funzioni anche su una macchina diversa dalla nostra.
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth 0 scarica tutta la storia: serve a SonarCloud per capire
+      # quali righe sono state toccate di recente.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # verify compila, esegue i 39 test e produce il report di copertura.
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # Questo passo si salta da solo finche' non aggiungiamo il segreto
+      # SONAR_TOKEN nelle impostazioni della repo.
+      - name: SonarCloud analysis
+        if: env.SONAR_TOKEN != ''
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
