@@ -22,15 +22,7 @@
     <sonar.organization>REPLACE-WITH-YOUR-SONAR-ORG</sonar.organization>
     <sonar.projectKey>REPLACE-WITH-YOUR-SONAR-PROJECT-KEY</sonar.projectKey>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <!-- La parte grafica non entra nell'analisi. -->
-    <sonar.exclusions>
-      src/main/java/it/uniroma2/tutorlink/boundary/**
-    </sonar.exclusions>
-    <!-- I tre DAO hanno per forza la stessa forma. -->
-    <sonar.cpd.exclusions>
-      src/main/java/it/uniroma2/tutorlink/boundary/**,
-      src/main/java/it/uniroma2/tutorlink/dao/**
-    </sonar.cpd.exclusions>
+    
     <sonar.coverage.jacoco.xmlReportPaths>
       ${project.build.directory}/site/jacoco/jacoco.xml
     </sonar.coverage.jacoco.xmlReportPaths>
